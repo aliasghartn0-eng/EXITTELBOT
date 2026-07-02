@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EXIT Web App</title>
+    <!-- اتصال به کتابخانه رسمی مینی‌اپ تلگرام -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+        
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; padding: 0;
+            background: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #0f0f1a 100%);
+            color: #fff; font-family: 'Vazirmatn', sans-serif;
+            display: flex; flex-direction: column; min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* افکت شیشه‌ای پیشرفته */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px; 
+            padding: 25px; 
+            margin: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            opacity: 0; transform: translateY(30px);
+        }
+        
+        .glass-panel:nth-child(1) { animation-delay: 0.1s; }
+        .glass-panel:nth-child(2) { animation-delay: 0.3s; }
+
+        h1 { 
+            text-align: center; font-size: 26px; margin-top: 0;
+            background: linear-gradient(to right, #00f2fe, #4facfe); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+
+        .user-profile {
+            display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 15px;
+        }
+        .avatar {
+            width: 65px; height: 65px; border-radius: 50%; 
+            border: 2px solid #00f2fe; box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+            object-fit: cover;
+        }
+        
+        .btn-group { display: flex; flex-direction: column; gap: 12px; }
+        .btn {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            border: none; color: white; padding: 14px 20px;
+            text-align: center; font-size: 16px; border-radius: 12px;
+            width: 100%; cursor: pointer; transition: all 0.3s ease;
+            font-family: 'Vazirmatn', sans-serif; font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+        }
+        .btn:active { transform: scale(0.96); box-shadow: 0 2px 5px rgba(0, 242, 254, 0.2); }
+        .btn.danger { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); box-shadow: 0 4px 15px rgba(255, 8, 68, 0.3); }
+        .btn.success { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); box-shadow: 0 4px 15px rgba(67, 233, 123, 0.3); color: #000; }
+
+        .made-by {
+            text-align: center; font-size: 11px; color: rgba(255, 255, 255, 0.3);
+            margin-top: auto; padding: 20px 0; letter-spacing: 2px; text-transform: uppercase;
+        }
+
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="glass-panel">
+        <div class="user-profile">
+            <img id="user-avatar" class="avatar" src="https://via.placeholder.com/65" alt="Avatar">
+            <div>
+                <div id="user-name" style="font-weight: 700; font-size: 19px; text-shadow: 0 0 10px rgba(255,255,255,0.2);">در حال بارگذاری...</div>
+                <div id="user-id" style="font-size: 13px; color: #00f2fe; margin-top: 3px;">شناسه: ----</div>
+            </div>
+        </div>
+        <p style="font-size: 13px; color: #aaa; margin: 0; line-height: 1.6;">
+            به مینی‌اپ اختصاصی سیستم EXIT خوش آمدید. تمامی سرویس‌ها از اینجا قابل کنترل هستند.
+        </p>
+    </div>
+
+    <div class="glass-panel">
+        <h1>مرکز کنترل</h1>
+        <div class="btn-group">
+            <button class="btn" onclick="tg.showAlert('دسترسی به فروشگاه گرافیکی به زودی فعال می‌شود.')">🛒 خرید اشتراک (Shop)</button>
+            <button class="btn" onclick="tg.showAlert('اعتبار فعلی شما: VIP Premium (30 روز)')">💎 وضعیت اشتراک من</button>
+            <button class="btn danger" onclick="tg.openTelegramLink('https://t.me/YourSupportID1')">🎧 ارتباط با پشتیبانی</button>
+            <button class="btn success" onclick="tg.close()">✅ بستن برنامه</button>
+        </div>
+    </div>
+
+    <div class="made-by">Made by ALIBY</div>
+
+    <script>
+        // راه‌اندازی Web App تلگرام
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // باز شدن اپ به صورت تمام صفحه
+        
+        // تنظیم رنگ هدر اپلیکیشن همرنگ بک‌گراند ما
+        tg.setHeaderColor('#1a1a2e');
+        
+        // دریافت اطلاعات کاربری شخصی که ربات را باز کرده
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            document.getElementById('user-name').innerText = tg.initDataUnsafe.user.first_name + (tg.initDataUnsafe.user.last_name ? ' ' + tg.initDataUnsafe.user.last_name : '');
+            document.getElementById('user-id').innerText = 'شناسه: ' + tg.initDataUnsafe.user.id;
+            
+            if(tg.initDataUnsafe.user.photo_url) {
+                document.getElementById('user-avatar').src = tg.initDataUnsafe.user.photo_url;
+            }
+        }
+        
+        // ارسال پیام به ربات در صورت نیاز (این تابع اطلاعات را به ربات پاس می‌دهد)
+        function sendDataToBot(action) {
+            tg.sendData(action);
+        }
+    </script>
+</body>
+</html>
